@@ -1183,6 +1183,7 @@
         // State variables
         let selectedSkills = new Set();
         let currentPreset = 'all';
+        let currentComboId = null;
         let searchQuery = '';
 
         // DOM elements
@@ -1244,14 +1245,24 @@
             // Filter and score list
             let filtered = [];
             if (!searchQuery) {
-                filtered = SKILLS_DB.filter(s => currentPreset === 'all' || s.preset === currentPreset);
+                if (currentComboId) {
+                    const targetPresets = new Set(COMBOS[currentComboId]);
+                    filtered = SKILLS_DB.filter(s => targetPresets.has(s.preset));
+                } else {
+                    filtered = SKILLS_DB.filter(s => currentPreset === 'all' || s.preset === currentPreset);
+                }
             } else {
                 const searchWords = searchQuery.toLowerCase()
                     .split(/[,\s.!?\-\\/()]+/)
                     .filter(w => w.length > 1 && !STOPWORDS.has(w));
                     
                 if (searchWords.length === 0) {
-                    filtered = SKILLS_DB.filter(s => currentPreset === 'all' || s.preset === currentPreset);
+                    if (currentComboId) {
+                        const targetPresets = new Set(COMBOS[currentComboId]);
+                        filtered = SKILLS_DB.filter(s => targetPresets.has(s.preset));
+                    } else {
+                        filtered = SKILLS_DB.filter(s => currentPreset === 'all' || s.preset === currentPreset);
+                    }
                 } else {
                     // Expand search words with synonyms
                     const expandedWords = [];
@@ -1631,6 +1642,7 @@
                     if (e.target.closest('.add-preset-btn')) return;
                     
                     document.getElementById('combo-description').style.display = 'none';
+                    currentComboId = null;
                     
                     presetButtons.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
@@ -1643,6 +1655,7 @@
             document.querySelectorAll('.combo-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const comboId = btn.dataset.combo;
+                    currentComboId = comboId;
                     const targetPresets = new Set(COMBOS[comboId]);
                     
                     // Clear current selection
@@ -1662,6 +1675,8 @@
                         document.getElementById('combo-desc-text').innerHTML = descInfo.desc;
                         document.getElementById('combo-description').style.display = 'flex';
                     }
+                    
+                    presetButtons.forEach(b => b.classList.remove('active'));
                     
                     updatePromptBuilder();
                     updatePresetCounts();
