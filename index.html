@@ -1938,6 +1938,21 @@
                     zip.file(filename, mergedContent);
                 }
 
+                // Add Installation Guide
+                let installGuide = '';
+                if (format === 'agents') {
+                    installGuide = `# Как установить скиллы для Antigravity\n\n1. Распакуйте архив в корень вашего проекта.\n2. Папка \`.agents\` должна оказаться в корне (на одном уровне с вашим кодом).\n3. Перезапустите или запустите Antigravity — он автоматически обнаружит новые скиллы и начнёт их использовать.\n`;
+                } else if (format === 'cursor') {
+                    installGuide = `# Как установить скиллы для Cursor\n\n1. Распакуйте архив в корень вашего проекта.\n2. Убедитесь, что появилась папка \`.cursor/rules/\` с файлами \`.mdc\` внутри.\n3. Откройте Cursor. Правила применятся автоматически. Для надёжности можно перезагрузить окно (Cmd/Ctrl + Shift + P -> Reload Window).\n`;
+                } else if (format === 'vscode') {
+                    installGuide = `# Как установить скиллы для Roo Code / Cline\n\n1. Распакуйте архив в корень вашего проекта.\n2. Папка \`.clinerules\` должна оказаться в корне проекта.\n3. ИИ-ассистент автоматически прочитает эти файлы как системные инструкции.\n`;
+                } else if (format === 'prompt') {
+                    installGuide = `# Универсальные скиллы\n\nВы скачали скиллы в виде обычных Markdown-файлов. Вы можете скопировать их текст в диалоговое окно или загрузить как файлы в Knowledge Base (Базу Знаний) кастомного GPT или Claude Project.\n`;
+                } else {
+                    installGuide = `# Как установить скиллы\n\n1. Распакуйте архив.\n2. Поместите извлечённый файл в самый корень вашего проекта.\n3. Ваш AI-ассистент будет автоматически учитывать этот файл при генерации кода и ответов.\n`;
+                }
+                zip.file("README_INSTALL.md", installGuide);
+
                 const btnOriginalHTML = btnDownloadPrompt.innerHTML;
                 btnDownloadPrompt.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Подготовка архива...';
                 
