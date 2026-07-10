@@ -25,14 +25,13 @@
     <!-- Custom Styling (Sleek Dark Mode & Glassmorphism) -->
     <style>
         :root {
-            --bg-color: #09090b;
-            --panel-bg: rgba(255, 255, 255, 0.02);
-            --border-color: rgba(255, 255, 255, 0.06);
-            --accent: #6366f1;
-            --accent-grad: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-            --accent-glow: rgba(99, 102, 241, 0.15);
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.7);
+            --bg-color: #121212;
+            --panel-bg: #1c1c1e;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --accent: #ff5757;
+            --accent-glow: transparent;
+            --text-primary: #ededed;
+            --text-secondary: #939393;
             --card-hover: rgba(255, 255, 255, 0.04);
             --success: #10b981;
             --warning: #f59e0b;
@@ -71,10 +70,6 @@
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
-            background-image: radial-gradient(circle at 15% 0%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
-                              radial-gradient(circle at 85% 100%, rgba(168, 85, 247, 0.08) 0%, transparent 40%);
-            background-color: var(--bg-color);
-            background-attachment: fixed;
         }
 
         header {
@@ -83,7 +78,7 @@
             align-items: center;
             padding: 1.5rem 2rem;
             border-bottom: 1px solid var(--border-color);
-            background: rgba(11, 12, 16, 0.8);
+            background: rgba(18, 18, 18, 0.8);
             backdrop-filter: blur(12px);
             position: sticky;
             top: 0;
@@ -97,18 +92,11 @@
             font-family: 'Montserrat', sans-serif;
             font-size: 1.5rem;
             font-weight: 800;
-            background: var(--accent-grad);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--text-primary);
         }
 
         .logo i {
-            -webkit-text-fill-color: initial;
-            background: var(--accent-grad);
-            color: white;
-            padding: 0.5rem;
-            border-radius: 10px;
+            color: var(--accent);
             font-size: 1.25rem;
         }
 
@@ -122,7 +110,7 @@
         }
 
         .shimmer-title {
-            background: linear-gradient(135deg, #6366f1 0%, #ffffff 25%, #a855f7 50%, #818cf8 75%, #6366f1 100%);
+            background: linear-gradient(135deg, #a1a1aa 0%, #ffffff 50%, #a1a1aa 100%);
             background-size: 200% auto;
             -webkit-background-clip: text;
             background-clip: text;
@@ -193,9 +181,9 @@
         }
 
         .preset-btn.active {
-            background: rgba(99, 102, 241, 0.1);
-            border-color: rgba(99, 102, 241, 0.3);
-            color: #818cf8;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+            color: var(--text-primary);
             font-weight: 600;
         }
 
@@ -209,8 +197,8 @@
         }
 
         .preset-btn.active .preset-count {
-            background: rgba(99, 102, 241, 0.2);
-            color: #818cf8;
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--text-primary);
         }
 
         /* Content Area */
@@ -374,16 +362,16 @@
         }
 
         .skill-card:hover {
-            border-color: rgba(168, 85, 247, 0.4);
+            border-color: rgba(255, 255, 255, 0.15);
             background: rgba(255, 255, 255, 0.04);
             transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(168, 85, 247, 0.15);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
         }
 
         .skill-card.selected {
-            border-color: #6366f1;
-            background: rgba(99, 102, 241, 0.08);
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.2), inset 0 0 0 1px #6366f1;
+            border-color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), inset 0 0 0 1px var(--text-primary);
         }
 
         .card-header {
@@ -481,8 +469,8 @@
         }
 
         .skill-card.selected .card-checkbox {
-            border-color: #6366f1;
-            background: #6366f1;
+            border-color: var(--accent);
+            background: var(--accent);
         }
 
         .skill-card.selected .card-checkbox i {
@@ -525,17 +513,18 @@
         .btn-card {
             background: transparent;
             border: none;
-            color: #6366f1;
+            color: var(--text-primary);
             font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 0.3rem;
+            opacity: 0.7;
         }
 
         .btn-card:hover {
-            color: #818cf8;
+            opacity: 1;
             text-decoration: underline;
         }
 
@@ -568,13 +557,12 @@
         }
 
         .selected-count-badge {
-            background: var(--accent-grad);
-            color: white;
+            background: var(--text-primary);
+            color: #111;
             font-size: 0.8rem;
             font-weight: 700;
             padding: 0.25rem 0.75rem;
             border-radius: 20px;
-            box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
         }
 
         .prompt-preview-box {
@@ -607,7 +595,7 @@
         }
 
         .prompt-textarea:focus {
-            border-color: #6366f1;
+            border-color: var(--text-primary);
         }
 
         /* Accordion preview styles */
@@ -768,18 +756,20 @@
         .btn-primary {
             background: var(--accent-grad);
             border: none;
-            color: #0a0a0a;
+            color: #111;
             width: 100%;
             padding: 1rem;
             border-radius: 12px;
             font-size: 1rem;
             font-weight: 700;
-            box-shadow: 0 4px 15px var(--accent-glow);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
         }
 
         .btn-primary:hover {
             transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+            background: #ffffff;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
         }
 
         .btn-primary:active {
