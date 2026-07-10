@@ -1107,6 +1107,8 @@
                     </select>
                 </div>
                 
+                <div id="format-hint" style="font-size: 0.8rem; color: var(--success); margin-top: 0.2rem; text-align: center; display: none;"></div>
+
                 <button class="btn btn-primary" id="btn-copy-prompt">
                     <i class="fa-solid fa-copy"></i> Скопировать сборку
                 </button>
@@ -1521,9 +1523,30 @@
             const format = exporterType.value;
             let output = '';
 
+            let preamble = '';
+            let extName = '';
+            
+            switch (format) {
+                case 'cursor': preamble = 'You are an expert AI Product Manager. Follow these rules:\n\n'; extName = '.cursorrules'; break;
+                case 'vscode': preamble = 'You are an expert AI Product Manager. Follow these rules:\n\n'; extName = '.clinerules'; break;
+                case 'copilot': preamble = 'You are an expert AI Product Manager. Follow these rules:\n\n'; extName = 'copilot-instructions.md'; break;
+                case 'windsurf': preamble = 'You are an expert AI Product Manager. Follow these rules:\n\n'; extName = '.windsurfrules'; break;
+                case 'aider': preamble = 'You are an expert AI Product Manager. Follow these rules:\n\n'; extName = 'CONVENTIONS.md'; break;
+                case 'pi': preamble = 'You are an expert AI Product Manager. Follow these rules:\n\n'; extName = 'APPEND_SYSTEM.md'; break;
+                case 'claudeprompt': preamble = 'You are an expert AI Product Manager. Follow these rules:\n\n'; extName = '.claudeprompt'; break;
+                case 'agents': preamble = 'You are an expert AI Product Manager. Follow these rules:\n\n'; extName = 'AGENTS.md'; break;
+                case 'prompt': preamble = 'You are an expert Product Manager AI. Adhere to the following skills and instructions:\n\n'; extName = 'Промпт в чат'; break;
+            }
+
+            const hintDiv = document.getElementById('format-hint');
+            if (hintDiv) {
+                hintDiv.style.display = 'block';
+                hintDiv.innerHTML = `<i class="fa-solid fa-file-export"></i> Выбран формат: <b>${extName}</b>`;
+            }
+
             // Concatenate rule files block
             const blocks = selectedList.map(s => `# СКИЛЛ: /${s.id}\n\n${s.content.trim()}`);
-            output = blocks.join('\n\n---\n\n');
+            output = preamble + blocks.join('\n\n---\n\n');
             compiledPromptText = output;
 
             // Clear visual preview container
@@ -1776,6 +1799,7 @@
             // Native tooltip for exporter type select
             exporterType.addEventListener('change', () => {
                 exporterType.title = exporterType.options[exporterType.selectedIndex].text;
+                updatePromptBuilder();
             });
         }
     </script>
