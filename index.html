@@ -18,6 +18,9 @@
 
     <!-- Marked Markdown Parser -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <!-- JSZip for Archive Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
     <!-- Custom Styling (Sleek Dark Mode & Glassmorphism) -->
     <style>
@@ -1699,6 +1702,17 @@
                 hintDiv.innerHTML = `<i class="fa-solid fa-file-export"></i> Выбран формат: <b>${extName}</b>`;
             }
 
+            const installHint = document.getElementById('install-hint');
+            const installHintText = document.getElementById('install-hint-text');
+            if (installHint && installHintText) {
+                installHint.style.display = 'block';
+                if (format === 'cursor') installHintText.innerHTML = 'Скачай архив и распакуй папку <b>.cursor/</b> прямо в корень твоего проекта.';
+                else if (format === 'vscode') installHintText.innerHTML = 'Скачай архив и распакуй папку <b>.clinerules/</b> прямо в корень твоего проекта.';
+                else if (format === 'agents') installHintText.innerHTML = 'Скачай архив и распакуй папку <b>.agents/</b> в корень твоего проекта.';
+                else if (format === 'prompt') installHintText.innerHTML = 'Скачай архив с Markdown-файлами. Их можно прикрепить к контексту чата или использовать как базу знаний (Knowledge Base).';
+                else installHintText.innerHTML = `Скачай архив и распакуй файл <b>${extName}</b> в корень твоего проекта.`;
+            }
+
             // Concatenate rule files block
             const blocks = selectedList.map(s => `# СКИЛЛ: /${s.id}\n\n${s.content.trim()}`);
             output = preamble + blocks.join('\n\n---\n\n');
@@ -1880,40 +1894,67 @@
             });
 
             // Download file rules button
-            btnDownloadPrompt.addEventListener('click', () => {
-                const text = compiledPromptText;
-                if (!text) {
+            btnDownloadPrompt.addEventListener('click', async () => {
+                if (selectedSkills.size === 0) {
                     alert('Пожалуйста, выберите сначала хотя бы один скилл.');
                     return;
                 }
 
                 const format = exporterType.value;
-                let filename = 'SYSTEM_PROMPT.md';
+                const zip = new JSZip();
 
-                if (format === 'cursor') filename = '.cursorrules';
-                else if (format === 'vscode') filename = '.clinerules';
-                else if (format === 'copilot') filename = 'copilot-instructions.md';
-                else if (format === 'windsurf') filename = '.windsurfrules';
-                else if (format === 'aider') filename = 'CONVENTIONS.md';
-                else if (format === 'pi') filename = 'APPEND_SYSTEM.md';
-                else if (format === 'claudeprompt') filename = 'CLAUDE.md';
-                else if (format === 'agents') filename = 'AGENTS.md';
-                else if (format === 'prompt') {
-                    // Try to guess a good name based on selected preset or count
-                    if (selectedSkills.size === 1) {
-                        filename = `${Array.from(selectedSkills)[0]}_PROMPT.md`;
-                    } else {
-                        filename = 'custom_PROMPT.md';
-                    }
+                // Get selected skills objects
+                const selectedList = SKILLS_DB.filter(s => selectedSkills.has(s.id));
+
+                if (format === 'agents') {
+                    selectedList.forEach(s => {
+                        const content = `---\nname: ${s.name}\ndescription: ${s.description}\n---\n\n${s.content}`;
+                        zip.file(`.agents/skills/${s.id}/SKILL.md`, content);
+                    });
+                } else if (format === 'cursor') {
+                    selectedList.forEach(s => {
+                        zip.file(`.cursor/rules/${s.id}.mdc`, s.content);
+                    });
+                } else if (format === 'vscode') {
+                    selectedList.forEach(s => {
+                        zip.file(`.clinerules/${s.id}.md`, s.content);
+                    });
+                } else if (format === 'prompt') {
+                    selectedList.forEach(s => {
+                        zip.file(`${s.id}.md`, s.content);
+                    });
+                } else {
+                    let filename = 'SYSTEM_PROMPT.md';
+                    if (format === 'copilot') filename = '.github/copilot-instructions.md';
+                    else if (format === 'windsurf') filename = '.windsurfrules';
+                    else if (format === 'aider') filename = 'CONVENTIONS.md';
+                    else if (format === 'pi') filename = 'APPEND_SYSTEM.md';
+                    else if (format === 'claudeprompt') filename = 'CLAUDE.md';
+
+                    let mergedContent = `# System Instructions\n\n`;
+                    selectedList.forEach(s => {
+                        mergedContent += `<skill name="${s.id}">\n${s.content}\n</skill>\n\n`;
+                    });
+                    zip.file(filename, mergedContent);
                 }
 
-                const blob = new Blob([text], { type: 'text/markdown;charset=utf-8;' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.setAttribute('download', filename);
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                const btnOriginalHTML = btnDownloadPrompt.innerHTML;
+                btnDownloadPrompt.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Подготовка архива...';
+                
+                try {
+                    const blob = await zip.generateAsync({ type: 'blob' });
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.setAttribute('download', 'pdm_skills_export.zip');
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                } catch (e) {
+                    console.error('Ошибка создания архива', e);
+                    alert('Не удалось создать архив. Проверьте консоль.');
+                }
+                
+                btnDownloadPrompt.innerHTML = btnOriginalHTML;
             });
 
             // Modal detailing view
