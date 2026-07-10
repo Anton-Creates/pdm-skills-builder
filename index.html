@@ -110,6 +110,30 @@
             background: rgba(255, 255, 255, 0.03);
         }
 
+        .pro-badge {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0.15rem 0.5rem;
+            border-radius: 12px;
+            color: #0a0a0a;
+            background: linear-gradient(135deg, #e5c158, #f1d57d, #e5c158);
+            background-size: 200% auto;
+            animation: proShine 3s linear infinite;
+            box-shadow: 0 0 10px rgba(229, 193, 88, 0.3);
+            margin-left: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            transform: translateY(-2px);
+        }
+
+        @keyframes proShine {
+            to {
+                background-position: 200% center;
+            }
+        }
+
         .main-layout {
             display: flex;
             flex: 1;
@@ -910,8 +934,9 @@
 <body>
 
     <header>
-        <div class="logo">
+        <div class="logo" style="display: flex; align-items: center;">
             <span>PdM-Skills Builder</span>
+            <div class="pro-badge">PRO</div>
         </div>
         <div class="version" id="library-count">Библиотека: ... скиллов</div>
     </header>
@@ -1122,6 +1147,7 @@
     <footer class="app-footer">
         <div style="display: flex; align-items: center; gap: 8px;">
             <span>PdM-Skills Builder</span>
+            <div class="pro-badge">PRO</div>
         </div>
         <div style="display: flex; align-items: center; gap: 15px;">
             <span style="font-weight: 500; color: #a1a1aa;">Создатель проекта:</span>
