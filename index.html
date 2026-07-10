@@ -853,6 +853,47 @@
                 max-height: none;
             }
         }
+
+        /* App Footer */
+        .app-footer {
+            border-top: 1px solid var(--border-color);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(11, 12, 16, 0.6);
+            backdrop-filter: blur(10px);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .author-badge {
+            font-size: 13px; 
+            color: #fff; 
+            text-decoration: none; 
+            border: 1px solid #3f3f46; 
+            background: rgba(255,255,255,0.05); 
+            padding: 6px 12px; 
+            border-radius: 8px; 
+            transition: all 0.2s; 
+            display: flex; 
+            align-items: center; 
+            gap: 6px;
+        }
+
+        .author-badge:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .app-footer {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -980,21 +1021,7 @@
                 </div>
             </div>
             
-            <!-- Sidebar Footer -->
-            <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 10px;">
-                <div style="font-size: 13px; color: #a1a1aa; font-weight: 500;">Создатель проекта:</div>
-                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                    <a href="https://t.me/mikhaylove_anton" target="_blank" class="author-badge" style="font-size: 13px; color: #fff; text-decoration: none; border: 1px solid #3f3f46; background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 8px; transition: all 0.2s; display: flex; align-items: center; gap: 6px;">
-                        @mikhaylove_anton <i class="fa-brands fa-telegram" style="color: #6366f1;"></i>
-                    </a>
-                    <a href="https://www.linkedin.com/in/anton-mikhaylove/" target="_blank" class="author-badge" style="font-size: 13px; color: #fff; text-decoration: none; border: 1px solid #3f3f46; background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 8px; transition: all 0.2s; display: flex; align-items: center; gap: 6px;">
-                        Anton Mikhaylove <i class="fa-brands fa-linkedin" style="color: #0a66c2;"></i>
-                    </a>
-                    <a href="https://github.com/Anton-Creates/pdm-skills-builder" target="_blank" class="author-badge" style="font-size: 13px; color: #fff; text-decoration: none; border: 1px solid #3f3f46; background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 8px; transition: all 0.2s; display: flex; align-items: center; gap: 6px;">
-                        GitHub Repo <i class="fa-brands fa-github" style="color: #fff;"></i>
-                    </a>
-                </div>
-            </div>
+
         </div>
 
         <!-- Main Workspace -->
@@ -1079,6 +1106,27 @@
             </div>
         </div>
     </div>
+
+    <footer class="app-footer">
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-brain" style="color: var(--accent);"></i>
+            <span>PdM-Skills Builder</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <span style="font-weight: 500; color: #a1a1aa;">Создатель проекта:</span>
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <a href="https://t.me/mikhaylove_anton" target="_blank" class="author-badge">
+                    @mikhaylove_anton <i class="fa-brands fa-telegram" style="color: #6366f1;"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/anton-mikhaylove/" target="_blank" class="author-badge">
+                    Anton Mikhaylove <i class="fa-brands fa-linkedin" style="color: #0a66c2;"></i>
+                </a>
+                <a href="https://github.com/Anton-Creates/pdm-skills-builder" target="_blank" class="author-badge">
+                    GitHub Repo <i class="fa-brands fa-github" style="color: #fff;"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
 
     <!-- Detail Modal -->
     <div class="modal" id="detail-modal">
