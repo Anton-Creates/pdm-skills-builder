@@ -110,22 +110,14 @@
             background: rgba(255, 255, 255, 0.03);
         }
 
-        .pro-badge {
-            font-size: 0.65rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 0.15rem 0.5rem;
-            border-radius: 12px;
-            color: #0a0a0a;
-            background: linear-gradient(135deg, #e5c158, #f1d57d, #e5c158);
+        .shimmer-title {
+            background: linear-gradient(135deg, #e5c158 0%, #ffffff 25%, #e5c158 50%, #f1d57d 75%, #e5c158 100%);
             background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
             animation: proShine 3s linear infinite;
-            box-shadow: 0 0 10px rgba(229, 193, 88, 0.3);
-            margin-left: 0.5rem;
-            display: inline-flex;
-            align-items: center;
-            transform: translateY(-2px);
+            display: inline-block;
         }
 
         @keyframes proShine {
@@ -934,9 +926,8 @@
 <body>
 
     <header>
-        <div class="logo" style="display: flex; align-items: center;">
-            <span>PdM-Skills Builder</span>
-            <div class="pro-badge">PRO</div>
+        <div class="logo">
+            <span class="shimmer-title">PdM-Skills Builder</span>
         </div>
         <div class="version" id="library-count">Библиотека: ... скиллов</div>
     </header>
@@ -1146,8 +1137,7 @@
 
     <footer class="app-footer">
         <div style="display: flex; align-items: center; gap: 8px;">
-            <span>PdM-Skills Builder</span>
-            <div class="pro-badge">PRO</div>
+            <span class="shimmer-title" style="font-weight: 800; font-size: 1.1rem;">PdM-Skills Builder</span>
         </div>
         <div style="display: flex; align-items: center; gap: 15px;">
             <span style="font-weight: 500; color: #a1a1aa;">Создатель проекта:</span>
