@@ -1,5 +1,5 @@
 ---
-name: Проектирование количественных опросов (Survey Design)
+name: survey-design
 description: Помогает создавать эффективные, неискаженные анкеты и опросы для количественных исследований, выбирая правильные шкалы и логику.
 lifecycle: discovery
 business-model: universal
