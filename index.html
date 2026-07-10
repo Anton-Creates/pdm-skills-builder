@@ -1199,7 +1199,7 @@
                         <option value="aider" title="Aider conventions (CONVENTIONS.md)">Aider conventions
                             (CONVENTIONS.md)</option>
                         <option value="pi" title="Pi Agent (APPEND_SYSTEM.md)">Pi Agent (APPEND_SYSTEM.md)</option>
-                        <option value="claudeprompt" title="Claude Code (.claudeprompt)">Claude Code (.claudeprompt)
+                        <option value="claudeprompt" title="Claude Code (CLAUDE.md)">Claude Code (CLAUDE.md)
                         </option>
                         <option value="agents" title="Gemini Antigravity (AGENTS.md)">Gemini Antigravity (AGENTS.md)
                         </option>
@@ -1650,7 +1650,7 @@
                 case 'windsurf': preamble = 'You are an expert AI Product Manager. Follow these rules:\n\n'; extName = '.windsurfrules'; break;
                 case 'aider': preamble = 'You are an expert AI Product Manager. Follow these rules:\n\n'; extName = 'CONVENTIONS.md'; break;
                 case 'pi': preamble = 'You are an expert AI Product Manager. Follow these rules:\n\n'; extName = 'APPEND_SYSTEM.md'; break;
-                case 'claudeprompt': preamble = 'You are an expert AI Product Manager. Follow these rules:\n\n'; extName = '.claudeprompt'; break;
+                case 'claudeprompt': preamble = 'You are an expert AI Product Manager. Follow these rules:\n\n'; extName = 'CLAUDE.md'; break;
                 case 'agents': preamble = 'You are an expert AI Product Manager. Follow these rules:\n\n'; extName = 'AGENTS.md'; break;
                 case 'prompt': preamble = 'You are an expert Product Manager AI. Adhere to the following skills and instructions:\n\n'; extName = 'Промпт в чат'; break;
             }
@@ -1858,7 +1858,7 @@
                 else if (format === 'windsurf') filename = '.windsurfrules';
                 else if (format === 'aider') filename = 'CONVENTIONS.md';
                 else if (format === 'pi') filename = 'APPEND_SYSTEM.md';
-                else if (format === 'claudeprompt') filename = '.claudeprompt';
+                else if (format === 'claudeprompt') filename = 'CLAUDE.md';
                 else if (format === 'agents') filename = 'AGENTS.md';
                 else if (format === 'prompt') {
                     // Try to guess a good name based on selected preset or count
