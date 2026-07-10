@@ -110,7 +110,7 @@
         }
 
         .shimmer-title {
-            background: linear-gradient(135deg, #a1a1aa 0%, #ffffff 50%, #a1a1aa 100%);
+            background: linear-gradient(135deg, #d97706 0%, #fbbf24 25%, #fef3c7 50%, #fbbf24 75%, #d97706 100%);
             background-size: 200% auto;
             -webkit-background-clip: text;
             background-clip: text;
@@ -1007,27 +1007,27 @@
     </header>
 
     <!-- Hero onboarding banner -->
-    <div id="hero-banner" style="background: linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(139,92,246,0.08) 100%); border-bottom: 1px solid rgba(99,102,241,0.2); padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap;">
+    <div id="hero-banner" style="background: var(--panel-bg); border-bottom: 1px solid var(--border-color); padding: 1.5rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap;">
         <div style="flex: 1; min-width: 260px;">
-            <div style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.3rem;">
-                <i class="fa-solid fa-bolt" style="color: #818cf8; margin-right: 6px;"></i>Библиотека AI-скиллов для продакт-менеджера
+            <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">
+                <i class="fa-solid fa-bolt" style="color: var(--accent); margin-right: 6px;"></i> Библиотека AI-скиллов для продакт-менеджера
             </div>
-            <div style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6; max-width: 680px;">
+            <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; max-width: 680px;">
                 Выбери нужные скиллы из <b style="color: var(--text-primary);">122 инструкций</b> для AI-ассистента - и он начнёт думать как опытный PdM. Каждый скилл - это готовая системная инструкция для ChatGPT, Claude, Cursor, Copilot или Gemini. Собери свой набор и скачай в нужном формате.
             </div>
         </div>
         <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; flex-shrink: 0;">
-            <div style="text-align: center; padding: 0.5rem 1rem; background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); border-radius: 10px;">
-                <div style="font-size: 1.4rem; font-weight: 800; color: #818cf8;">122</div>
-                <div style="font-size: 0.7rem; color: var(--text-secondary);">скилла</div>
+            <div style="text-align: center; padding: 0.5rem 1rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; min-width: 80px;">
+                <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary);">122</div>
+                <div style="font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px;">скилла</div>
             </div>
-            <div style="text-align: center; padding: 0.5rem 1rem; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); border-radius: 10px;">
-                <div style="font-size: 1.4rem; font-weight: 800; color: #10b981;">9</div>
-                <div style="font-size: 0.7rem; color: var(--text-secondary);">платформ</div>
+            <div style="text-align: center; padding: 0.5rem 1rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; min-width: 80px;">
+                <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary);">9</div>
+                <div style="font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px;">платформ</div>
             </div>
-            <div style="text-align: center; padding: 0.5rem 1rem; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); border-radius: 10px;">
-                <div style="font-size: 1.4rem; font-weight: 800; color: #f59e0b;">20+</div>
-                <div style="font-size: 0.7rem; color: var(--text-secondary);">доменов</div>
+            <div style="text-align: center; padding: 0.5rem 1rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; min-width: 80px;">
+                <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary);">20+</div>
+                <div style="font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px;">доменов</div>
             </div>
         </div>
         <button onclick="document.getElementById('hero-banner').style.display='none'" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.5" style="background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 1rem; flex-shrink: 0; opacity: 0.5;" title="Скрыть">
