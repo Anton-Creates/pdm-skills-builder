@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PdM-Skills Builder — Конструктор промптов и правил ИИ</title>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Marked Markdown Parser -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
@@ -43,13 +46,16 @@
             width: 6px;
             height: 6px;
         }
+
         ::-webkit-scrollbar-track {
             background: transparent;
         }
+
         ::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.15);
             border-radius: 10px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.3);
         }
@@ -187,11 +193,12 @@
         }
 
         .preset-count {
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             color: var(--text-secondary);
             background: rgba(255, 255, 255, 0.05);
             padding: 0.1rem 0.5rem;
             border-radius: 10px;
+            white-space: nowrap;
         }
 
         .preset-btn.active .preset-count {
@@ -399,15 +406,59 @@
         }
 
         /* Preset specific badge coloring */
-        .badge-core { border-color: rgba(59, 130, 246, 0.3); color: #60a5fa; background: rgba(59, 130, 246, 0.1); }
-        .badge-discovery { border-color: rgba(16, 185, 129, 0.3); color: #34d399; background: rgba(16, 185, 129, 0.1); }
-        .badge-saas { border-color: rgba(139, 92, 246, 0.3); color: #a78bfa; background: rgba(139, 92, 246, 0.1); }
-        .badge-marketplace { border-color: rgba(236, 72, 153, 0.3); color: #f472b6; background: rgba(236, 72, 153, 0.1); }
-        .badge-fintech { border-color: rgba(245, 158, 11, 0.3); color: #fbbf24; background: rgba(245, 158, 11, 0.1); }
-        .badge-ecom-retail { border-color: rgba(20, 184, 166, 0.3); color: #2dd4bf; background: rgba(20, 184, 166, 0.1); }
-        .badge-telecom-media { border-color: rgba(239, 68, 68, 0.3); color: #f87171; background: rgba(239, 68, 68, 0.1); }
-        .badge-enterprise-gov { border-color: rgba(107, 114, 128, 0.3); color: #9ca3af; background: rgba(107, 114, 128, 0.1); }
-        .badge-craft { border-color: rgba(244, 63, 94, 0.3); color: #fb7185; background: rgba(244, 63, 94, 0.1); }
+        .badge-core {
+            border-color: rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .badge-discovery {
+            border-color: rgba(16, 185, 129, 0.3);
+            color: #34d399;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .badge-saas {
+            border-color: rgba(139, 92, 246, 0.3);
+            color: #a78bfa;
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .badge-marketplace {
+            border-color: rgba(236, 72, 153, 0.3);
+            color: #f472b6;
+            background: rgba(236, 72, 153, 0.1);
+        }
+
+        .badge-fintech {
+            border-color: rgba(245, 158, 11, 0.3);
+            color: #fbbf24;
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .badge-ecom-retail {
+            border-color: rgba(20, 184, 166, 0.3);
+            color: #2dd4bf;
+            background: rgba(20, 184, 166, 0.1);
+        }
+
+        .badge-telecom-media {
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #f87171;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .badge-enterprise-gov {
+            border-color: rgba(107, 114, 128, 0.3);
+            color: #9ca3af;
+            background: rgba(107, 114, 128, 0.1);
+        }
+
+        .badge-craft {
+            border-color: rgba(244, 63, 94, 0.3);
+            color: #fb7185;
+            background: rgba(244, 63, 94, 0.1);
+        }
 
         .card-checkbox {
             width: 20px;
@@ -620,14 +671,18 @@
             background: rgba(0, 0, 0, 0.15);
         }
 
-        .accordion-body h1, .accordion-body h2, .accordion-body h3 {
+        .accordion-body h1,
+        .accordion-body h2,
+        .accordion-body h3 {
             font-size: 0.9rem;
             color: white;
             margin-top: 0.75rem;
             margin-bottom: 0.4rem;
         }
 
-        .accordion-body p, .accordion-body ul, .accordion-body ol {
+        .accordion-body p,
+        .accordion-body ul,
+        .accordion-body ol {
             margin-bottom: 0.6rem;
         }
 
@@ -701,7 +756,7 @@
             color: var(--text-primary);
         }
 
-    
+
 
         .btn-primary {
             background: var(--accent-grad);
@@ -802,7 +857,9 @@
         }
 
         /* Styling markdown contents in modal */
-        .modal-body h1, .modal-body h2, .modal-body h3 {
+        .modal-body h1,
+        .modal-body h2,
+        .modal-body h3 {
             font-family: 'Montserrat', sans-serif;
             color: white;
             margin-top: 1.5rem;
@@ -813,7 +870,8 @@
             margin-bottom: 1rem;
         }
 
-        .modal-body ul, .modal-body ol {
+        .modal-body ul,
+        .modal-body ol {
             margin-left: 1.5rem;
             margin-bottom: 1rem;
         }
@@ -849,13 +907,25 @@
 
         /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         /* Responsive Design */
@@ -863,11 +933,13 @@
             .main-layout {
                 flex-direction: column;
             }
+
             .sidebar {
                 width: 100%;
                 border-right: none;
                 border-bottom: 1px solid var(--border-color);
             }
+
             .drawer {
                 width: 100%;
                 border-left: none;
@@ -876,6 +948,7 @@
                 top: 0;
                 height: auto;
             }
+
             .content-area {
                 max-height: none;
             }
@@ -895,21 +968,21 @@
         }
 
         .author-badge {
-            font-size: 13px; 
-            color: #fff; 
-            text-decoration: none; 
-            border: 1px solid #3f3f46; 
-            background: rgba(255,255,255,0.05); 
-            padding: 6px 12px; 
-            border-radius: 8px; 
-            transition: all 0.2s; 
-            display: flex; 
-            align-items: center; 
+            font-size: 13px;
+            color: #fff;
+            text-decoration: none;
+            border: 1px solid #3f3f46;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 12px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
             gap: 6px;
         }
 
         .author-badge:hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             border-color: var(--accent);
             transform: translateY(-2px);
         }
@@ -923,6 +996,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <header>
@@ -965,7 +1039,8 @@
                 </div>
             </div>
 
-            <div class="sidebar-section" style="margin-top: 1.25rem; border-top: 1px solid var(--border-color); padding-top: 1.25rem;">
+            <div class="sidebar-section"
+                style="margin-top: 1.25rem; border-top: 1px solid var(--border-color); padding-top: 1.25rem;">
                 <h3>Категории / Пресеты</h3>
                 <div class="preset-list">
                     <button class="preset-btn active" data-preset="all">
@@ -1038,7 +1113,7 @@
                     </button>
                 </div>
             </div>
-            
+
 
         </div>
 
@@ -1048,9 +1123,10 @@
             <div class="ai-search-box">
                 <div class="search-input-wrapper">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="ai-search" placeholder="Что ты хочешь сделать? (Например: 'составить юзер стори', 'монетизация финтех', 'аудит корзины')">
+                    <input type="text" id="ai-search"
+                        placeholder="Что ты хочешь сделать? (Например: 'составить юзер стори', 'монетизация финтех', 'аудит корзины')">
                 </div>
-                
+
                 <!-- Client RAG Suggestions panel -->
                 <div class="rag-recommendations" id="rag-recommendations">
                     <div class="rag-recommendations-title">
@@ -1066,18 +1142,25 @@
             <!-- Bulk actions & controls -->
             <div class="bulk-actions">
                 <div class="bulk-buttons">
-                    <button class="btn btn-secondary" id="btn-select-preset"><i class="fa-solid fa-check-double"></i> Выбрать все из текущего</button>
-                    <button class="btn btn-secondary" id="btn-clear-selection"><i class="fa-solid fa-xmark"></i> Сбросить выбор</button>
+                    <button class="btn btn-secondary" id="btn-select-preset"><i class="fa-solid fa-check-double"></i>
+                        Выбрать все из текущего</button>
+                    <button class="btn btn-secondary" id="btn-clear-selection"><i class="fa-solid fa-xmark"></i>
+                        Сбросить выбор</button>
                 </div>
-                <div style="font-size: 0.9rem; color: var(--text-secondary);" id="filter-status">Показано: 0 из 106</div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary);" id="filter-status">Показано: 0 из 106
+                </div>
             </div>
 
             <!-- Combo description box -->
-            <div id="combo-description" style="display: none; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 12px; padding: 16px; margin-bottom: 24px; color: var(--text-primary); align-items: center; gap: 12px;">
-                <div style="font-size: 1.5rem; color: var(--accent); flex-shrink: 0;"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+            <div id="combo-description"
+                style="display: none; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 12px; padding: 16px; margin-bottom: 24px; color: var(--text-primary); align-items: center; gap: 12px;">
+                <div style="font-size: 1.5rem; color: var(--accent); flex-shrink: 0;"><i
+                        class="fa-solid fa-wand-magic-sparkles"></i></div>
                 <div>
-                    <strong id="combo-desc-title" style="display: block; font-size: 1.1rem; margin-bottom: 4px;"></strong>
-                    <span id="combo-desc-text" style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.4; display: block;"></span>
+                    <strong id="combo-desc-title"
+                        style="display: block; font-size: 1.1rem; margin-bottom: 4px;"></strong>
+                    <span id="combo-desc-text"
+                        style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.4; display: block;"></span>
                 </div>
             </div>
 
@@ -1092,35 +1175,45 @@
             <div class="drawer-header">
                 <h3>Конструктор правил</h3>
             </div>
-            
+
             <div class="prompt-preview-box">
                 <label>Предпросмотр сборки правил:</label>
                 <div class="prompt-preview-container" id="prompt-preview"></div>
             </div>
-            
+
             <div class="exporter-section">
                 <label>Формат выгрузки / Цель:</label>
                 <div class="exporter-select-wrapper">
                     <select id="exporter-type" title="Универсальный промпт (ChatGPT/DeepSeek/Claude Web)">
-                        <option value="prompt" title="Универсальный промпт (ChatGPT/DeepSeek/Claude Web)">Универсальный промпт (ChatGPT/DeepSeek/Claude Web)</option>
+                        <option value="prompt" title="Универсальный промпт (ChatGPT/DeepSeek/Claude Web)">Универсальный
+                            промпт (ChatGPT/DeepSeek/Claude Web)</option>
                         <option value="cursor" title="Cursor rules (.cursorrules)">Cursor rules (.cursorrules)</option>
-                        <option value="vscode" title="VS Code (Roo Code / Cline .clinerules)">VS Code (Roo Code / Cline .clinerules)</option>
-                        <option value="copilot" title="GitHub Copilot (.github/copilot-instructions.md)">GitHub Copilot (.github/copilot-instructions.md)</option>
-                        <option value="windsurf" title="Windsurf rules (.windsurfrules)">Windsurf rules (.windsurfrules)</option>
-                        <option value="aider" title="Aider conventions (CONVENTIONS.md)">Aider conventions (CONVENTIONS.md)</option>
+                        <option value="vscode" title="VS Code (Roo Code / Cline .clinerules)">VS Code (Roo Code / Cline
+                            .clinerules)</option>
+                        <option value="copilot" title="GitHub Copilot (.github/copilot-instructions.md)">GitHub Copilot
+                            (.github/copilot-instructions.md)</option>
+                        <option value="windsurf" title="Windsurf rules (.windsurfrules)">Windsurf rules (.windsurfrules)
+                        </option>
+                        <option value="aider" title="Aider conventions (CONVENTIONS.md)">Aider conventions
+                            (CONVENTIONS.md)</option>
                         <option value="pi" title="Pi Agent (APPEND_SYSTEM.md)">Pi Agent (APPEND_SYSTEM.md)</option>
-                        <option value="claudeprompt" title="Claude Code (.claudeprompt)">Claude Code (.claudeprompt)</option>
-                        <option value="agents" title="Gemini Antigravity (AGENTS.md)">Gemini Antigravity (AGENTS.md)</option>
+                        <option value="claudeprompt" title="Claude Code (.claudeprompt)">Claude Code (.claudeprompt)
+                        </option>
+                        <option value="agents" title="Gemini Antigravity (AGENTS.md)">Gemini Antigravity (AGENTS.md)
+                        </option>
                     </select>
                 </div>
-                
-                <div id="format-hint" style="font-size: 0.8rem; color: var(--success); margin-top: 0.2rem; text-align: center; display: none;"></div>
+
+                <div id="format-hint"
+                    style="font-size: 0.8rem; color: var(--success); margin-top: 0.2rem; text-align: center; display: none;">
+                </div>
 
                 <button class="btn btn-primary" id="btn-copy-prompt">
                     <i class="fa-solid fa-copy"></i> Скопировать сборку
                 </button>
-                
-                <button class="btn btn-secondary" id="btn-download-prompt" style="width: 100%; justify-content: center; padding: 0.8rem;">
+
+                <button class="btn btn-secondary" id="btn-download-prompt"
+                    style="width: 100%; justify-content: center; padding: 0.8rem;">
                     <i class="fa-solid fa-download"></i> Скачать файл правил
                 </button>
             </div>
@@ -1208,7 +1301,7 @@
         function updatePresetCounts() {
             const counts = { all: SKILLS_DB.length };
             const selectedCounts = { all: selectedSkills.size };
-            
+
             SKILLS_DB.forEach(s => {
                 counts[s.preset] = (counts[s.preset] || 0) + 1;
                 if (selectedSkills.has(s.id)) {
@@ -1233,7 +1326,7 @@
         // Render skill cards based on current filters using semantic RAG scoring if search query is active
         function renderSkills() {
             skillsGrid.innerHTML = '';
-            
+
             // Filter and score list
             let filtered = [];
             if (!searchQuery) {
@@ -1247,7 +1340,7 @@
                 const searchWords = searchQuery.toLowerCase()
                     .split(/[,\s.!?\-\\/()]+/)
                     .filter(w => w.length > 1 && !STOPWORDS.has(w));
-                    
+
                 if (searchWords.length === 0) {
                     if (currentComboId) {
                         const targetPresets = new Set(COMBOS[currentComboId]);
@@ -1319,7 +1412,7 @@
                 card.addEventListener('click', (e) => {
                     // Ignore clicks on action buttons
                     if (e.target.closest('[data-action="view-details"]')) return;
-                    
+
                     toggleSkillSelection(s.id);
                 });
 
@@ -1359,7 +1452,7 @@
                 } else {
                     modalBody.innerText = skill.content;
                 }
-                
+
                 // Reset copy button status
                 const btnCopyModal = document.getElementById('btn-copy-modal');
                 if (btnCopyModal) {
@@ -1368,7 +1461,7 @@
                     btnCopyModal.style.borderColor = '';
                     btnCopyModal.style.color = '';
                 }
-                
+
                 detailModal.style.display = 'flex';
             }
         }
@@ -1444,7 +1537,7 @@
             const searchWords = query.toLowerCase()
                 .split(/[,\s.!?\-\\/()]+/)
                 .filter(w => w.length > 1 && !STOPWORDS.has(w));
-                
+
             if (searchWords.length === 0) {
                 ragRecommendations.style.display = 'none';
                 return;
@@ -1506,18 +1599,18 @@
                         </span>
                         <i class="fa-solid fa-book-open view-details-btn" style="cursor: pointer; opacity: 0.6; padding: 2px 4px;" title="Посмотреть инструкцию"></i>
                     `;
-                    
+
                     badge.querySelector('.badge-toggle').addEventListener('click', (e) => {
                         e.stopPropagation();
                         toggleSkillSelection(item.skill.id);
                         runLocalRAG(query);
                     });
-                    
+
                     badge.querySelector('.view-details-btn').addEventListener('click', (e) => {
                         e.stopPropagation();
                         openSkillDetails(item.skill.id);
                     });
-                    
+
                     ragList.appendChild(badge);
                 });
             } else {
@@ -1542,7 +1635,7 @@
 
             let preamble = '';
             let extName = '';
-            
+
             switch (format) {
                 case 'cursor': preamble = 'You are an expert AI Product Manager. Follow these rules:\n\n'; extName = '.cursorrules'; break;
                 case 'vscode': preamble = 'You are an expert AI Product Manager. Follow these rules:\n\n'; extName = '.clinerules'; break;
@@ -1573,7 +1666,7 @@
             selectedList.forEach(s => {
                 const acc = document.createElement('div');
                 acc.className = 'preview-accordion';
-                
+
                 const header = document.createElement('div');
                 header.className = 'accordion-header';
                 header.innerHTML = `
@@ -1583,20 +1676,20 @@
                         <i class="fa-solid fa-chevron-down"></i>
                     </div>
                 `;
-                
+
                 const body = document.createElement('div');
                 body.className = 'accordion-body';
-                
+
                 // Parse markdown content
                 if (typeof marked !== 'undefined') {
                     body.innerHTML = marked.parse(s.content);
                 } else {
                     body.innerText = s.content;
                 }
-                
+
                 header.addEventListener('click', (e) => {
                     if (e.target.closest('.copy-single-btn')) return;
-                    
+
                     const isActive = acc.classList.contains('active');
                     if (isActive) {
                         acc.classList.remove('active');
@@ -1619,7 +1712,7 @@
                         }, 2000);
                     });
                 });
-                
+
                 acc.appendChild(header);
                 acc.appendChild(body);
                 promptPreview.appendChild(acc);
@@ -1632,10 +1725,10 @@
             presetButtons.forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     if (e.target.closest('.add-preset-btn')) return;
-                    
+
                     document.getElementById('combo-description').style.display = 'none';
                     currentComboId = null;
-                    
+
                     presetButtons.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     currentPreset = btn.dataset.preset;
@@ -1649,17 +1742,17 @@
                     const comboId = btn.dataset.combo;
                     currentComboId = comboId;
                     const targetPresets = new Set(COMBOS[comboId]);
-                    
+
                     // Clear current selection
                     selectedSkills.clear();
-                    
+
                     // Select all skills matching these presets
                     SKILLS_DB.forEach(s => {
                         if (targetPresets.has(s.preset)) {
                             selectedSkills.add(s.id);
                         }
                     });
-                    
+
                     // Show description
                     const descInfo = COMBO_DESCRIPTIONS[comboId];
                     if (descInfo) {
@@ -1667,14 +1760,14 @@
                         document.getElementById('combo-desc-text').innerHTML = descInfo.desc;
                         document.getElementById('combo-description').style.display = 'flex';
                     }
-                    
+
                     presetButtons.forEach(b => b.classList.remove('active'));
-                    
+
                     updatePromptBuilder();
                     updatePresetCounts();
                     renderSkills();
                     runLocalRAG(aiSearchInput.value);
-                    
+
                     // Visual feedback: briefly highlight the button
                     const originalBg = btn.style.background;
                     btn.style.background = 'rgba(16, 185, 129, 0.15)';
@@ -1696,7 +1789,7 @@
             // Bulk actions
             btnSelectPreset.addEventListener('click', () => {
                 document.getElementById('combo-description').style.display = 'none';
-                
+
                 SKILLS_DB.forEach(s => {
                     if (currentPreset === 'all' || s.preset === currentPreset) {
                         selectedSkills.add(s.id);
@@ -1710,7 +1803,7 @@
 
             btnClearSelection.addEventListener('click', () => {
                 document.getElementById('combo-description').style.display = 'none';
-                
+
                 selectedSkills.clear();
                 updatePromptBuilder();
                 updatePresetCounts();
@@ -1748,10 +1841,10 @@
                     alert('Пожалуйста, выберите сначала хотя бы один скилл.');
                     return;
                 }
-                
+
                 const format = exporterType.value;
                 let filename = 'SYSTEM_PROMPT.md';
-                
+
                 if (format === 'cursor') filename = '.cursorrules';
                 else if (format === 'vscode') filename = '.clinerules';
                 else if (format === 'copilot') filename = 'copilot-instructions.md';
@@ -1782,7 +1875,7 @@
             skillsGrid.addEventListener('click', (e) => {
                 const detailsBtn = e.target.closest('[data-action="view-details"]');
                 if (!detailsBtn) return;
-                
+
                 const skillId = detailsBtn.dataset.id;
                 openSkillDetails(skillId);
             });
@@ -1825,4 +1918,5 @@
         }
     </script>
 </body>
+
 </html>
