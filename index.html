@@ -1102,16 +1102,16 @@
             <div class="exporter-section">
                 <label>Формат выгрузки / Цель:</label>
                 <div class="exporter-select-wrapper">
-                    <select id="exporter-type">
-                        <option value="prompt">Универсальный промпт (ChatGPT/DeepSeek/Claude Web)</option>
-                        <option value="cursor">Cursor rules (.cursorrules)</option>
-                        <option value="vscode">VS Code (Roo Code / Cline .clinerules)</option>
-                        <option value="copilot">GitHub Copilot (.github/copilot-instructions.md)</option>
-                        <option value="windsurf">Windsurf rules (.windsurfrules)</option>
-                        <option value="aider">Aider conventions (CONVENTIONS.md)</option>
-                        <option value="pi">Pi Agent (APPEND_SYSTEM.md)</option>
-                        <option value="claudeprompt">Claude Code (.claudeprompt)</option>
-                        <option value="agents">Gemini Antigravity (AGENTS.md)</option>
+                    <select id="exporter-type" title="Универсальный промпт (ChatGPT/DeepSeek/Claude Web)">
+                        <option value="prompt" title="Универсальный промпт (ChatGPT/DeepSeek/Claude Web)">Универсальный промпт (ChatGPT/DeepSeek/Claude Web)</option>
+                        <option value="cursor" title="Cursor rules (.cursorrules)">Cursor rules (.cursorrules)</option>
+                        <option value="vscode" title="VS Code (Roo Code / Cline .clinerules)">VS Code (Roo Code / Cline .clinerules)</option>
+                        <option value="copilot" title="GitHub Copilot (.github/copilot-instructions.md)">GitHub Copilot (.github/copilot-instructions.md)</option>
+                        <option value="windsurf" title="Windsurf rules (.windsurfrules)">Windsurf rules (.windsurfrules)</option>
+                        <option value="aider" title="Aider conventions (CONVENTIONS.md)">Aider conventions (CONVENTIONS.md)</option>
+                        <option value="pi" title="Pi Agent (APPEND_SYSTEM.md)">Pi Agent (APPEND_SYSTEM.md)</option>
+                        <option value="claudeprompt" title="Claude Code (.claudeprompt)">Claude Code (.claudeprompt)</option>
+                        <option value="agents" title="Gemini Antigravity (AGENTS.md)">Gemini Antigravity (AGENTS.md)</option>
                     </select>
                 </div>
                 
@@ -1197,6 +1197,7 @@
 
         // Initial setup
         document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('library-count').innerHTML = `Библиотека: <b>${SKILLS_DB.length}</b> скиллов`;
             updatePresetCounts();
             renderSkills();
             setupEventListeners();
@@ -1778,6 +1779,11 @@
                 if (e.target === detailModal) {
                     detailModal.style.display = 'none';
                 }
+            });
+
+            // Native tooltip for exporter type select
+            exporterType.addEventListener('change', () => {
+                exporterType.title = exporterType.options[exporterType.selectedIndex].text;
             });
         }
     </script>
