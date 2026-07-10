@@ -1,0 +1,9 @@
+# Auto-generated prompts
+prompts/
+
+# Private recommendations and drafts
+recommendations/
+
+# OS specific files
+.DS_Store
+Thumbs.db
