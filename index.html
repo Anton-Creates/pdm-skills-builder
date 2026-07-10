@@ -857,6 +857,22 @@
         }
 
         /* Styling markdown contents in modal */
+        .stat-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .stat-badge span {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
         .modal-body h1,
         .modal-body h2,
         .modal-body h3 {
@@ -1259,6 +1275,14 @@
     <footer class="app-footer">
         <div style="display: flex; align-items: center; gap: 8px;">
             <span style="font-weight: 800; font-size: 1.1rem; color: #a1a1aa;">PdM-Skills Builder</span>
+            <div style="display: flex; gap: 8px; margin-left: 1rem;">
+                <div class="stat-badge" title="Просмотры страницы">
+                    <i class="fa-regular fa-eye"></i> <span id="view-count">...</span>
+                </div>
+                <div class="stat-badge" title="Скачивания сборок">
+                    <i class="fa-solid fa-download"></i> <span id="download-count">...</span>
+                </div>
+            </div>
         </div>
         <div style="display: flex; align-items: center; gap: 15px;">
             <span style="font-weight: 500; color: #a1a1aa;">Создатель проекта:</span>
@@ -1325,12 +1349,30 @@
         const modalBody = document.getElementById('modal-body');
         const modalClose = document.getElementById('modal-close');
 
+        // Analytics function
+        function initAnalytics() {
+            fetch('https://api.counterapi.dev/v1/Anton-Creates/pdm-skills-builder-views/up')
+                .then(res => res.json())
+                .then(data => {
+                    const el = document.getElementById('view-count');
+                    if (el) el.innerText = data.count;
+                }).catch(() => {});
+
+            fetch('https://api.counterapi.dev/v1/Anton-Creates/pdm-skills-builder-downloads')
+                .then(res => res.json())
+                .then(data => {
+                    const el = document.getElementById('download-count');
+                    if (el) el.innerText = data.count;
+                }).catch(() => {});
+        }
+
         // Initial setup
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('library-count').innerHTML = `Библиотека: <b>${SKILLS_DB.length}</b> скиллов`;
             updatePresetCounts();
             renderSkills();
             setupEventListeners();
+            initAnalytics();
         });
 
         // Compute counts of skills in each preset
@@ -1960,6 +2002,14 @@
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
+                    
+                    // Track download
+                    fetch('https://api.counterapi.dev/v1/Anton-Creates/pdm-skills-builder-downloads/up')
+                        .then(res => res.json())
+                        .then(data => {
+                            const el = document.getElementById('download-count');
+                            if (el) el.innerText = data.count;
+                        }).catch(() => {});
                 } catch (e) {
                     console.error('Ошибка создания архива', e);
                     alert('Не удалось создать архив. Проверьте консоль.');
