@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PdM-Skills Builder — Конструктор промптов и правил ИИ</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Marked Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Custom Styling (Sleek Dark Mode & Glassmorphism) -->
+    <style>
+        :root {
+            --bg-color: #0b0c10;
+            --panel-bg: rgba(20, 22, 31, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --accent-grad: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --accent-glow: rgba(99, 102, 241, 0.25);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --card-hover: rgba(31, 41, 55, 0.6);
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.12) 0px, transparent 50%);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(11, 12, 16, 0.8);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--accent-grad);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo i {
+            -webkit-text-fill-color: initial;
+            background: var(--accent-grad);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 10px;
+            font-size: 1.25rem;
+        }
+
+        .version {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .main-layout {
+            display: flex;
+            flex: 1;
+            position: relative;
+        }
+
+        /* Sidebar Filters */
+        .sidebar {
+            width: 280px;
+            border-right: 1px solid var(--border-color);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            background: rgba(11, 12, 16, 0.4);
+        }
+
+        .sidebar-section h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .preset-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .preset-btn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .preset-btn:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: var(--border-color);
+        }
+
+        .preset-btn.active {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+            color: #818cf8;
+            font-weight: 600;
+        }
+
+        .preset-count {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.1rem 0.5rem;
+            border-radius: 10px;
+        }
+
+        .preset-btn.active .preset-count {
+            background: rgba(99, 102, 241, 0.2);
+            color: #818cf8;
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            overflow-y: auto;
+            max-height: calc(100vh - 78px);
+        }
+
+        /* Client RAG AI search bar */
+        .ai-search-box {
+            position: relative;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.25rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input-wrapper i {
+            position: absolute;
+            left: 1.25rem;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .search-input-wrapper input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input-wrapper input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 10px var(--accent-glow);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Search Results Recommendations (RAG Panel) */
+        .rag-recommendations {
+            display: none;
+            background: rgba(245, 158, 11, 0.05);
+            border: 1px dashed rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .rag-recommendations-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--warning);
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .rag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .rag-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #fbbf24;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .rag-item:hover {
+            background: rgba(245, 158, 11, 0.2);
+            transform: translateY(-1px);
+        }
+
+        /* Bulk Operations */
+        .bulk-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bulk-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Grid of Skill Cards */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .skill-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+        }
+
+        .skill-card:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            background: var(--card-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .skill-card.selected {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.05);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .card-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Preset specific badge coloring */
+        .badge-core { border-color: rgba(59, 130, 246, 0.3); color: #60a5fa; background: rgba(59, 130, 246, 0.1); }
+        .badge-discovery { border-color: rgba(16, 185, 129, 0.3); color: #34d399; background: rgba(16, 185, 129, 0.1); }
+        .badge-saas { border-color: rgba(139, 92, 246, 0.3); color: #a78bfa; background: rgba(139, 92, 246, 0.1); }
+        .badge-marketplace { border-color: rgba(236, 72, 153, 0.3); color: #f472b6; background: rgba(236, 72, 153, 0.1); }
+        .badge-fintech { border-color: rgba(245, 158, 11, 0.3); color: #fbbf24; background: rgba(245, 158, 11, 0.1); }
+        .badge-ecom-retail { border-color: rgba(20, 184, 166, 0.3); color: #2dd4bf; background: rgba(20, 184, 166, 0.1); }
+        .badge-telecom-media { border-color: rgba(239, 68, 68, 0.3); color: #f87171; background: rgba(239, 68, 68, 0.1); }
+        .badge-enterprise-gov { border-color: rgba(107, 114, 128, 0.3); color: #9ca3af; background: rgba(107, 114, 128, 0.1); }
+        .badge-craft { border-color: rgba(244, 63, 94, 0.3); color: #fb7185; background: rgba(244, 63, 94, 0.1); }
+
+        .card-checkbox {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.2s ease;
+            background: rgba(255, 255, 255, 0.02);
+            flex-shrink: 0;
+        }
+
+        .skill-card.selected .card-checkbox {
+            border-color: #6366f1;
+            background: #6366f1;
+        }
+
+        .skill-card.selected .card-checkbox i {
+            color: white;
+            font-size: 0.75rem;
+            display: block;
+        }
+
+        .card-checkbox i {
+            display: none;
+        }
+
+        .card-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex-grow: 1;
+        }
+
+        .card-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 0.75rem;
+            margin-top: auto;
+        }
+
+        .card-id {
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .btn-card {
+            background: transparent;
+            border: none;
+            color: #6366f1;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .btn-card:hover {
+            color: #818cf8;
+            text-decoration: underline;
+        }
+
+        /* Right Panel: Prompt Builder Drawer */
+        .drawer {
+            width: 380px;
+            border-left: 1px solid var(--border-color);
+            background: rgba(11, 12, 16, 0.9);
+            backdrop-filter: blur(12px);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            position: sticky;
+            top: 78px;
+            height: calc(100vh - 78px);
+            overflow-y: auto;
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .drawer-header h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .selected-count-badge {
+            background: var(--accent-grad);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+        }
+
+        .prompt-preview-box {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            flex: 1;
+            min-height: 200px;
+        }
+
+        .prompt-preview-box label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .prompt-textarea {
+            width: 100%;
+            flex: 1;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            color: var(--text-primary);
+            font-family: monospace;
+            font-size: 0.8rem;
+            resize: none;
+            outline: none;
+            line-height: 1.4;
+        }
+
+        .prompt-textarea:focus {
+            border-color: #6366f1;
+        }
+
+        /* Accordion preview styles */
+        .prompt-preview-container {
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            overflow-y: auto;
+            max-height: 400px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .preview-accordion {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.02);
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .preview-accordion.active {
+            border-color: rgba(99, 102, 241, 0.5);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 0.8rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            user-select: none;
+            transition: background 0.2s ease;
+        }
+
+        .accordion-header:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .accordion-header .fa-chevron-down {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            transition: transform 0.2s ease;
+        }
+
+        .preview-accordion.active .accordion-header .fa-chevron-down {
+            transform: rotate(180deg);
+            color: #818cf8;
+        }
+
+        .accordion-body {
+            display: none;
+            padding: 0.8rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.75rem;
+            line-height: 1.4;
+            color: #d1d5db;
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        .accordion-body h1, .accordion-body h2, .accordion-body h3 {
+            font-size: 0.9rem;
+            color: white;
+            margin-top: 0.75rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .accordion-body p, .accordion-body ul, .accordion-body ol {
+            margin-bottom: 0.6rem;
+        }
+
+        .accordion-body li {
+            margin-left: 1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .accordion-body code {
+            font-family: monospace;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 0.1rem 0.25rem;
+            border-radius: 3px;
+            color: #f472b6;
+        }
+
+        .copy-single-btn {
+            transition: all 0.2s ease;
+        }
+
+        .copy-single-btn:hover {
+            color: #818cf8;
+            transform: scale(1.15);
+            opacity: 1 !important;
+        }
+
+        .combo-btn:hover .fa-wand-magic-sparkles {
+            color: #a855f7 !important;
+            opacity: 1 !important;
+            transform: scale(1.15);
+        }
+
+        .combo-btn .fa-wand-magic-sparkles {
+            transition: all 0.2s ease;
+        }
+
+        /* Exporter Selector & Actions */
+        .exporter-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .exporter-select-wrapper {
+            position: relative;
+        }
+
+        .exporter-select-wrapper select {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.8rem 1rem;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            outline: none;
+            appearance: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .exporter-select-wrapper select:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .exporter-select-wrapper select option {
+            background-color: #11131a;
+            color: var(--text-primary);
+        }
+
+        .exporter-select-wrapper::after {
+            content: "\f0d7";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            pointer-events: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-grad);
+            border: none;
+            color: white;
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* Modal/Popup window for details */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-content {
+            background: #11131a;
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 800px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+        }
+
+        .modal-action-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: var(--text-primary);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-action-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+            color: #818cf8;
+        }
+
+        .modal-close:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .modal-body {
+            padding: 2rem;
+            overflow-y: auto;
+            line-height: 1.6;
+            color: #e5e7eb;
+            font-size: 0.95rem;
+        }
+
+        /* Styling markdown contents in modal */
+        .modal-body h1, .modal-body h2, .modal-body h3 {
+            font-family: 'Outfit', sans-serif;
+            color: white;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .modal-body p {
+            margin-bottom: 1rem;
+        }
+
+        .modal-body ul, .modal-body ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-body li {
+            margin-bottom: 0.4rem;
+        }
+
+        .modal-body code {
+            font-family: monospace;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #f472b6;
+        }
+
+        .modal-body pre {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+
+        .modal-body pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+            font-size: 0.85rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .drawer {
+                width: 100%;
+                border-left: none;
+                border-top: 1px solid var(--border-color);
+                position: relative;
+                top: 0;
+                height: auto;
+            }
+            .content-area {
+                max-height: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-brain"></i>
+            <span>PdM-Skills Builder</span>
+        </div>
+        <div class="version" id="library-count">Библиотека: ... скиллов</div>
+    </header>
+
+    <div class="main-layout">
+        <!-- Sidebar filters -->
+        <div class="sidebar">
+                        <div class="sidebar-section">
+                <h3 style="color: #a855f7;"><i class="fa-solid fa-bolt"></i> Готовые комбо-сборки</h3>
+                <div class="preset-list">
+                    <button class="preset-btn combo-btn" data-combo="1">
+                        <span>🛠️ Universal PM Craft</span>
+                        <i class="fa-solid fa-wand-magic-sparkles" title="Выбрать комбо-сборку" style="opacity: 0.5;"></i>
+                    </button>
+                    <button class="preset-btn combo-btn" data-combo="2">
+                        <span>📈 B2B / SaaS PM</span>
+                        <i class="fa-solid fa-wand-magic-sparkles" title="Выбрать комбо-сборку" style="opacity: 0.5;"></i>
+                    </button>
+                    <button class="preset-btn combo-btn" data-combo="3">
+                        <span>🛒 Marketplace & E-commerce PM</span>
+                        <i class="fa-solid fa-wand-magic-sparkles" title="Выбрать комбо-сборку" style="opacity: 0.5;"></i>
+                    </button>
+                    <button class="preset-btn combo-btn" data-combo="4">
+                        <span>🏦 Fintech & Banking PM</span>
+                        <i class="fa-solid fa-wand-magic-sparkles" title="Выбрать комбо-сборку" style="opacity: 0.5;"></i>
+                    </button>
+                    <button class="preset-btn combo-btn" data-combo="5">
+                        <span>🏢 Enterprise & B2G PM</span>
+                        <i class="fa-solid fa-wand-magic-sparkles" title="Выбрать комбо-сборку" style="opacity: 0.5;"></i>
+                    </button>
+                    <button class="preset-btn combo-btn" data-combo="6">
+                        <span>🧠 AI / Data Product PM</span>
+                        <i class="fa-solid fa-wand-magic-sparkles" title="Выбрать комбо-сборку" style="opacity: 0.5;"></i>
+                    </button>
+                    <button class="preset-btn combo-btn" data-combo="7">
+                        <span>🥖 D2C / Subscription Commerce PM</span>
+                        <i class="fa-solid fa-wand-magic-sparkles" title="Выбрать комбо-сборку" style="opacity: 0.5;"></i>
+                    </button>
+                    <button class="preset-btn combo-btn" data-combo="8">
+                        <span>👔 CPO / Product Leadership</span>
+                        <i class="fa-solid fa-wand-magic-sparkles" title="Выбрать комбо-сборку" style="opacity: 0.5;"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="sidebar-section" style="margin-top: 1.25rem; border-top: 1px solid var(--border-color); padding-top: 1.25rem;">
+                <h3>Категории / Пресеты</h3>
+                <div class="preset-list">
+                    <button class="preset-btn active" data-preset="all">
+                        <span>Все скиллы</span>
+                        <span class="preset-count" id="count-all">0</span>
+                    </button>
+                    <button class="preset-btn" data-preset="core">
+                        <span>Ядро PdM (Core)</span>
+                        <span class="preset-count" id="count-core">0</span>
+                    </button>
+                    <button class="preset-btn" data-preset="discovery">
+                        <span>Исследования (Discovery)</span>
+                        <span class="preset-count" id="count-discovery">0</span>
+                    </button>
+                    <button class="preset-btn" data-preset="saas">
+                        <span>SaaS / PLG</span>
+                        <span class="preset-count" id="count-saas">0</span>
+                    </button>
+                    <button class="preset-btn" data-preset="b2b">
+                        <span>B2B Продукты</span>
+                        <span class="preset-count" id="count-b2b">0</span>
+                    </button>
+                    <button class="preset-btn" data-preset="marketplace">
+                        <span>Маркетплейсы</span>
+                        <span class="preset-count" id="count-marketplace">0</span>
+                    </button>
+                    <button class="preset-btn" data-preset="fintech">
+                        <span>Финтех</span>
+                        <span class="preset-count" id="count-fintech">0</span>
+                    </button>
+                    <button class="preset-btn" data-preset="ecom-retail">
+                        <span>Ритейл и E-com</span>
+                        <span class="preset-count" id="count-ecom-retail">0</span>
+                    </button>
+                    <button class="preset-btn" data-preset="telecom-media">
+                        <span>Медиа и Реклама</span>
+                        <span class="preset-count" id="count-telecom-media">0</span>
+                    </button>
+                    <button class="preset-btn" data-preset="enterprise">
+                        <span>Enterprise / In-house</span>
+                        <span class="preset-count" id="count-enterprise">0</span>
+                    </button>
+                    <button class="preset-btn" data-preset="b2g">
+                        <span>Госсектор (B2G)</span>
+                        <span class="preset-count" id="count-b2g">0</span>
+                    </button>
+                    <button class="preset-btn" data-preset="growth">
+                        <span>Рост и Монетизация</span>
+                        <span class="preset-count" id="count-growth">0</span>
+                    </button>
+                    <button class="preset-btn" data-preset="measure">
+                        <span>Аналитика и Метрики</span>
+                        <span class="preset-count" id="count-measure">0</span>
+                    </button>
+                    <button class="preset-btn" data-preset="strategy">
+                        <span>Стратегия и Лидерство</span>
+                        <span class="preset-count" id="count-strategy">0</span>
+                    </button>
+                    <button class="preset-btn" data-preset="ai-data">
+                        <span>AI & Data Products</span>
+                        <span class="preset-count" id="count-ai-data">0</span>
+                    </button>
+                    <button class="preset-btn" data-preset="d2c">
+                        <span>D2C и Подписки</span>
+                        <span class="preset-count" id="count-d2c">0</span>
+                    </button>
+                    <button class="preset-btn" data-preset="craft">
+                        <span>Фреймворки (Craft)</span>
+                        <span class="preset-count" id="count-craft">0</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Sidebar Footer -->
+            <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 10px;">
+                <div style="font-size: 13px; color: #a1a1aa; font-weight: 500;">Создатель проекта:</div>
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <a href="https://t.me/mikhaylove_anton" target="_blank" class="author-badge" style="font-size: 13px; color: #fff; text-decoration: none; border: 1px solid #3f3f46; background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 8px; transition: all 0.2s; display: flex; align-items: center; gap: 6px;">
+                        @mikhaylove_anton <i class="fa-brands fa-telegram" style="color: #6366f1;"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/anton-mikhaylove/" target="_blank" class="author-badge" style="font-size: 13px; color: #fff; text-decoration: none; border: 1px solid #3f3f46; background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 8px; transition: all 0.2s; display: flex; align-items: center; gap: 6px;">
+                        Anton Mikhaylove <i class="fa-brands fa-linkedin" style="color: #0a66c2;"></i>
+                    </a>
+                    <a href="https://github.com/Anton-Creates/pdm-skills-builder" target="_blank" class="author-badge" style="font-size: 13px; color: #fff; text-decoration: none; border: 1px solid #3f3f46; background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 8px; transition: all 0.2s; display: flex; align-items: center; gap: 6px;">
+                        GitHub Repo <i class="fa-brands fa-github" style="color: #fff;"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Workspace -->
+        <div class="content-area">
+            <!-- Client RAG AI search bar -->
+            <div class="ai-search-box">
+                <div class="search-input-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="ai-search" placeholder="Что ты хочешь сделать? (Например: 'составить юзер стори', 'монетизация финтех', 'аудит корзины')">
+                </div>
+                
+                <!-- Client RAG Suggestions panel -->
+                <div class="rag-recommendations" id="rag-recommendations">
+                    <div class="rag-recommendations-title">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>Рекомендации:</span>
+                    </div>
+                    <div class="rag-list" id="rag-list">
+                        <!-- Dynamic RAG suggestion badges -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bulk actions & controls -->
+            <div class="bulk-actions">
+                <div class="bulk-buttons">
+                    <button class="btn btn-secondary" id="btn-select-preset"><i class="fa-solid fa-check-double"></i> Выбрать все из текущего</button>
+                    <button class="btn btn-secondary" id="btn-clear-selection"><i class="fa-solid fa-xmark"></i> Сбросить выбор</button>
+                </div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary);" id="filter-status">Показано: 0 из 106</div>
+            </div>
+
+            <!-- Combo description box -->
+            <div id="combo-description" style="display: none; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 12px; padding: 16px; margin-bottom: 24px; color: var(--text-primary); align-items: center; gap: 12px;">
+                <div style="font-size: 1.5rem; color: var(--accent); flex-shrink: 0;"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                <div>
+                    <strong id="combo-desc-title" style="display: block; font-size: 1.1rem; margin-bottom: 4px;"></strong>
+                    <span id="combo-desc-text" style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.4; display: block;"></span>
+                </div>
+            </div>
+
+            <!-- Skills Cards Grid -->
+            <div class="skills-grid" id="skills-grid">
+                <!-- Skill cards loaded dynamically from skills_db.js -->
+            </div>
+        </div>
+
+        <!-- Right Side: Prompt Builder Drawer -->
+        <div class="drawer">
+            <div class="drawer-header">
+                <h3>Конструктор правил</h3>
+            </div>
+            
+            <div class="prompt-preview-box">
+                <label>Предпросмотр сборки правил:</label>
+                <div class="prompt-preview-container" id="prompt-preview"></div>
+            </div>
+            
+            <div class="exporter-section">
+                <label>Формат выгрузки / Цель:</label>
+                <div class="exporter-select-wrapper">
+                    <select id="exporter-type">
+                        <option value="prompt">Универсальный промпт (ChatGPT/DeepSeek/Claude Web)</option>
+                        <option value="cursor">Cursor rules (.cursorrules)</option>
+                        <option value="vscode">VS Code (Roo Code / Cline .clinerules)</option>
+                        <option value="copilot">GitHub Copilot (.github/copilot-instructions.md)</option>
+                        <option value="windsurf">Windsurf rules (.windsurfrules)</option>
+                        <option value="aider">Aider conventions (CONVENTIONS.md)</option>
+                        <option value="pi">Pi Agent (APPEND_SYSTEM.md)</option>
+                        <option value="claudeprompt">Claude Code (.claudeprompt)</option>
+                        <option value="agents">Gemini Antigravity (AGENTS.md)</option>
+                    </select>
+                </div>
+                
+                <button class="btn btn-primary" id="btn-copy-prompt">
+                    <i class="fa-solid fa-copy"></i> Скопировать сборку
+                </button>
+                
+                <button class="btn btn-secondary" id="btn-download-prompt" style="width: 100%; justify-content: center; padding: 0.8rem;">
+                    <i class="fa-solid fa-download"></i> Скачать файл правил
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div class="modal" id="detail-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title" id="modal-title">Скилл</span>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <button class="modal-action-btn" id="btn-copy-modal" title="Скопировать промпт">
+                        <i class="fa-solid fa-copy"></i>
+                    </button>
+                    <button class="modal-action-btn modal-close" id="modal-close" title="Закрыть">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Markdown parsed details -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Local DB JS -->
+    <script src="skills_db.js"></script>
+
+    <!-- Client application logic -->
+    <script>
+        // State variables
+        let selectedSkills = new Set();
+        let currentPreset = 'all';
+        let searchQuery = '';
+
+        // DOM elements
+        const presetButtons = document.querySelectorAll('.preset-btn');
+        const skillsGrid = document.getElementById('skills-grid');
+        const aiSearchInput = document.getElementById('ai-search');
+        const ragRecommendations = document.getElementById('rag-recommendations');
+        const ragList = document.getElementById('rag-list');
+        const filterStatus = document.getElementById('filter-status');
+        const promptPreview = document.getElementById('prompt-preview');
+        const btnSelectPreset = document.getElementById('btn-select-preset');
+        const btnClearSelection = document.getElementById('btn-clear-selection');
+        const btnCopyPrompt = document.getElementById('btn-copy-prompt');
+        const btnDownloadPrompt = document.getElementById('btn-download-prompt');
+        const exporterType = document.getElementById('exporter-type');
+        const detailModal = document.getElementById('detail-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        const modalClose = document.getElementById('modal-close');
+
+        // Initial setup
+        document.addEventListener('DOMContentLoaded', () => {
+            updatePresetCounts();
+            renderSkills();
+            setupEventListeners();
+        });
+
+        // Compute counts of skills in each preset
+        function updatePresetCounts() {
+            const counts = { all: SKILLS_DB.length };
+            const selectedCounts = { all: selectedSkills.size };
+            
+            SKILLS_DB.forEach(s => {
+                counts[s.preset] = (counts[s.preset] || 0) + 1;
+                if (selectedSkills.has(s.id)) {
+                    selectedCounts[s.preset] = (selectedCounts[s.preset] || 0) + 1;
+                }
+            });
+
+            Object.keys(counts).forEach(preset => {
+                const badge = document.getElementById(`count-${preset}`);
+                if (badge) {
+                    const total = counts[preset];
+                    const sel = selectedCounts[preset] || 0;
+                    if (sel > 0) {
+                        badge.innerHTML = `${total} <span style="color: #10b981; font-weight: 700; margin-left: 2px;">(${sel})</span>`;
+                    } else {
+                        badge.innerText = total;
+                    }
+                }
+            });
+        }
+
+        // Render skill cards based on current filters using semantic RAG scoring if search query is active
+        function renderSkills() {
+            skillsGrid.innerHTML = '';
+            
+            // Filter and score list
+            let filtered = [];
+            if (!searchQuery) {
+                filtered = SKILLS_DB.filter(s => currentPreset === 'all' || s.preset === currentPreset);
+            } else {
+                const searchWords = searchQuery.toLowerCase()
+                    .split(/[,\s.!?\-\\/()]+/)
+                    .filter(w => w.length > 1 && !STOPWORDS.has(w));
+                    
+                if (searchWords.length === 0) {
+                    filtered = SKILLS_DB.filter(s => currentPreset === 'all' || s.preset === currentPreset);
+                } else {
+                    // Expand search words with synonyms
+                    const expandedWords = [];
+                    searchWords.forEach(w => {
+                        expandedWords.push(w);
+                        if (SYNONYMS[w]) {
+                            expandedWords.push(SYNONYMS[w]);
+                        }
+                    });
+                    const stems = expandedWords.map(getStem);
+                    const scored = SKILLS_DB.map(s => {
+                        let score = 0;
+                        const nameLower = s.name.toLowerCase();
+                        const idLower = s.id.toLowerCase();
+                        const descLower = s.description.toLowerCase();
+                        const contentLower = s.content.toLowerCase();
+
+                        stems.forEach(stem => {
+                            if (idLower.includes(stem)) score += 12;
+                            if (nameLower.includes(stem)) score += 10;
+                            if (descLower.includes(stem)) score += 5;
+                            if (contentLower.includes(stem)) score += 1;
+                        });
+
+                        return { skill: s, score };
+                    });
+
+                    filtered = scored
+                        .filter(item => item.score > 0 && (currentPreset === 'all' || item.skill.preset === currentPreset))
+                        .sort((a, b) => b.score - a.score)
+                        .map(item => item.skill);
+                }
+            }
+
+            // Update status text
+            filterStatus.innerHTML = `Показано: ${filtered.length} из ${SKILLS_DB.length} <span style="margin-left: 1rem; color: #10b981; font-weight: 600;">(выбрано: ${selectedSkills.size})</span>`;
+
+            // Create cards
+            filtered.forEach(s => {
+                const card = document.createElement('div');
+                card.className = `skill-card ${selectedSkills.has(s.id) ? 'selected' : ''}`;
+                card.dataset.id = s.id;
+
+                card.innerHTML = `
+                    <div class="card-header">
+                        <span class="card-badge badge-${s.preset}">${s.preset}</span>
+                        <div class="card-checkbox">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                    </div>
+                    <div class="card-title">${s.name}</div>
+                    <div class="card-desc">${s.description}</div>
+                    <div class="card-actions">
+                        <span class="card-id">/${s.id}</span>
+                        <button class="btn-card" data-action="view-details" data-id="${s.id}">
+                            <i class="fa-solid fa-book-open"></i> Инструкция
+                        </button>
+                    </div>
+                `;
+
+                // Handle card click (selecting/deselecting skill)
+                card.addEventListener('click', (e) => {
+                    // Ignore clicks on action buttons
+                    if (e.target.closest('[data-action="view-details"]')) return;
+                    
+                    toggleSkillSelection(s.id);
+                });
+
+                skillsGrid.appendChild(card);
+            });
+        }
+
+        // Toggle selection state
+        function toggleSkillSelection(skillId) {
+            if (selectedSkills.has(skillId)) {
+                selectedSkills.delete(skillId);
+            } else {
+                selectedSkills.add(skillId);
+            }
+            updatePromptBuilder();
+            updatePresetCounts();
+            renderSkills();
+        }
+
+        // Initialize UI
+        function init() {
+            document.getElementById('library-count').innerHTML = `Библиотека: <b>${SKILLS_DB.length}</b> скиллов`;
+            updatePresetCounts();
+            renderSkills();
+        }
+
+        let activeModalSkillId = null;
+
+        // Open details modal
+        function openSkillDetails(skillId) {
+            activeModalSkillId = skillId;
+            const skill = SKILLS_DB.find(s => s.id === skillId);
+            if (skill) {
+                modalTitle.innerText = `Инструкции скилла: /${skill.id} (${skill.name})`;
+                if (typeof marked !== 'undefined') {
+                    modalBody.innerHTML = marked.parse(skill.content);
+                } else {
+                    modalBody.innerText = skill.content;
+                }
+                
+                // Reset copy button status
+                const btnCopyModal = document.getElementById('btn-copy-modal');
+                if (btnCopyModal) {
+                    btnCopyModal.innerHTML = '<i class="fa-solid fa-copy"></i>';
+                    btnCopyModal.style.background = '';
+                    btnCopyModal.style.borderColor = '';
+                    btnCopyModal.style.color = '';
+                }
+                
+                detailModal.style.display = 'flex';
+            }
+        }
+
+        // Stopwords for better matching
+        const STOPWORDS = new Set([
+            'хочу', 'сделать', 'разработать', 'нужно', 'как', 'для', 'где', 'есть', 'бы', 'это', 'что', 'составить', 'написать', 'на', 'в', 'и', 'или', 'с', 'по', 'о', 'у', 'к', 'за', 'из', 'от', 'до', 'при', 'перед', 'через', 'после', 'над', 'под', 'об', 'обо', 'про', 'я', 'ты', 'он', 'она', 'оно', 'мы', 'вы', 'они', 'мой', 'твой', 'свой', 'наш', 'ваш', 'его', 'ее', 'их', 'кто', 'что', 'какой', 'чей', 'тот', 'этот', 'такой', 'каждый', 'весь', 'сам', 'самый', 'любой', 'иной', 'другой', 'один', 'два', 'три',
+            'i', 'want', 'to', 'make', 'build', 'create', 'need', 'how', 'for', 'where', 'is', 'it', 'this', 'that', 'a', 'an', 'the', 'and', 'or', 'with', 'by', 'of', 'at', 'to', 'from', 'in', 'on'
+        ]);
+
+        function getStem(word) {
+            if (word.length <= 4) return word;
+            if (word.length <= 6) return word.substring(0, word.length - 1);
+            if (word.length <= 8) return word.substring(0, word.length - 2);
+            return word.substring(0, word.length - 3);
+        }
+
+        // Synonyms and transliterations dictionary for Product Managers
+        const SYNONYMS = {
+            "юзер": "user",
+            "стори": "story",
+            "сториз": "story",
+            "пиэм": "pm",
+            "пм": "pm",
+            "роадмап": "roadmap",
+            "родмап": "roadmap",
+            "бэклог": "backlog",
+            "фича": "feature",
+            "фичи": "feature",
+            "аб": "ab",
+            "пиарди": "prd",
+            "сиджейэм": "cjm",
+            "юнит": "unit",
+            "саас": "saas",
+            "окр": "okr",
+            "митинг": "meeting",
+            "ретро": "retro",
+            "демо": "demo",
+            "дейли": "daily"
+        };
+
+        // Recommended role-based combinations (combos) matching manager.py
+        const COMBOS = {
+            "1": ["core", "discovery", "strategy", "measure"],
+            "2": ["core", "saas", "growth", "craft"],
+            "3": ["core", "marketplace", "ecom-retail", "growth"],
+            "4": ["core", "fintech", "strategy", "measure"],
+            "5": ["core", "enterprise", "b2g", "internal-products"],
+            "6": ["core", "ai-data", "platform-api", "measure"],
+            "7": ["core", "d2c", "subscription", "growth"],
+            "8": ["cpo", "strategy", "measure", "core"]
+        };
+
+        const COMBO_DESCRIPTIONS = {
+            "1": { title: "🛠️ Universal PM Craft", desc: "Базовый набор продакта для дискавери, стратегии, аналитики и работы с командой.<br><br><b>🎯 Типовые задачи:</b> написание PRD и user stories, пользовательские интервью, базовая продуктовая аналитика, приоритизация бэклога, дизайн A/B тестов." },
+            "2": { title: "📈 B2B / SaaS PM", desc: "Сборка для B2B SaaS продуктов, ориентированная на метрики, рост (PLG) и продуктовую стратегию.<br><br><b>🎯 Типовые задачи:</b> улучшение воронки активации, настройка биллинга и интеграций, расчет NRR и LTV, снижение оттока (churn), проектирование Product-Led Growth." },
+            "3": { title: "🛒 Marketplace & E-commerce PM", desc: "Сборка для маркетплейсов и e-commerce: конверсии, юнит-экономика, каталог и рост.<br><br><b>🎯 Типовые задачи:</b> балансировка спроса и предложения, сходимость юнит-экономики заказа, поиск и алгоритмы ранжирования, аудит конверсии чекаута." },
+            "4": { title: "🏦 Fintech & Banking PM", desc: "Сборка для финтех-продуктов, необанков и классического банкинга: комплаенс, экономика риска, стратегия и аналитика.<br><br><b>🎯 Типовые задачи:</b> расчет кредитного риска и unit-экономики, продуктовый комплаенс (KYC/AML), безопасность, проектирование финансовых и скоринговых продуктов." },
+            "5": { title: "🏢 Enterprise & B2G PM", desc: "Сборка для B2B Enterprise и гос.сектора: интранет, внедрение, тендеры и внутренние продукты.<br><br><b>🎯 Типовые задачи:</b> работа с длинными циклами продаж, планирование внедрения (rollout), ответы на RFP/RFI, развитие внутренних инструментов и порталов, контроль SLA." },
+            "6": { title: "🧠 AI / Data Product PM", desc: "Сборка для продуктов на базе AI и данных: LLM спецификации, API, платформы и метрики качества.<br><br><b>🎯 Типовые задачи:</b> спецификация AI-фич и промптов, дизайн датасетов (evals), снижение уровня галлюцинаций, управление дата-пайплайнами и API-платформами." },
+            "7": { title: "🥖 D2C / Subscription Commerce PM", desc: "Сборка для D2C подписок: экономика коробки, ретеншн, рост и физическая доставка.<br><br><b>🎯 Типовые задачи:</b> расчет экономики коробки (box economics), реферальные механики, удержание и возврат подписчиков, улучшение SLA логистики и fulfillment." },
+            "8": { title: "👔 CPO / Product Leadership", desc: "Набор руководителя: портфель инициатив, защита инвестиций, product health review, P&L и стратегия.<br><br><b>🎯 Типовые задачи:</b> защита инвестиционных меморандумов и бизнес-кейсов, управление P&L, аудит здоровья портфеля продуктов, kill-or-scale решения, настройка operating model." }
+        };
+
+        // Client-side local RAG search (TF similarity logic with stopword filtering & stemming)
+        function runLocalRAG(query) {
+            if (!query || query.trim().length < 2) {
+                ragRecommendations.style.display = 'none';
+                return;
+            }
+
+            // Split into words, filter stopwords
+            const searchWords = query.toLowerCase()
+                .split(/[,\s.!?\-\\/()]+/)
+                .filter(w => w.length > 1 && !STOPWORDS.has(w));
+                
+            if (searchWords.length === 0) {
+                ragRecommendations.style.display = 'none';
+                return;
+            }
+
+            // Expand search words with synonyms
+            const expandedWords = [];
+            searchWords.forEach(w => {
+                expandedWords.push(w);
+                if (SYNONYMS[w]) {
+                    expandedWords.push(SYNONYMS[w]);
+                }
+            });
+
+            // Generate stems
+            const stems = expandedWords.map(getStem);
+
+            const scored = SKILLS_DB.map(s => {
+                let score = 0;
+                const nameLower = s.name.toLowerCase();
+                const idLower = s.id.toLowerCase();
+                const descLower = s.description.toLowerCase();
+                const contentLower = s.content.toLowerCase();
+
+                stems.forEach(stem => {
+                    // Match folder ID (Weight 12)
+                    if (idLower.includes(stem)) score += 12;
+                    // Match title (Weight 10)
+                    if (nameLower.includes(stem)) score += 10;
+                    // Match description (Weight 5)
+                    if (descLower.includes(stem)) score += 5;
+                    // Match body content (Weight 1)
+                    if (contentLower.includes(stem)) score += 1;
+                });
+
+                return { skill: s, score };
+            });
+
+            // Filter out items with score = 0 and sort descending
+            const recommendations = scored
+                .filter(item => item.score > 0)
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 5); // top 5 recommendations
+
+            if (recommendations.length > 0) {
+                ragRecommendations.style.display = 'block';
+                ragList.innerHTML = '';
+                recommendations.forEach(item => {
+                    const badge = document.createElement('div');
+                    badge.className = 'rag-item';
+                    badge.style.display = 'inline-flex';
+                    badge.style.alignItems = 'center';
+                    badge.style.gap = '0.3rem';
+                    badge.innerHTML = `
+                        <span class="badge-toggle" style="cursor: pointer; display: flex; align-items: center; gap: 0.3rem;">
+                            <i class="fa-solid ${selectedSkills.has(item.skill.id) ? 'fa-square-check' : 'fa-square-plus'}"></i>
+                            <span>/${item.skill.id}</span>
+                            <span style="font-size: 0.75rem; opacity: 0.6;">(${Math.round(item.score)} pts)</span>
+                        </span>
+                        <i class="fa-solid fa-book-open view-details-btn" style="cursor: pointer; opacity: 0.6; padding: 2px 4px;" title="Посмотреть инструкцию"></i>
+                    `;
+                    
+                    badge.querySelector('.badge-toggle').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        toggleSkillSelection(item.skill.id);
+                        runLocalRAG(query);
+                    });
+                    
+                    badge.querySelector('.view-details-btn').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        openSkillDetails(item.skill.id);
+                    });
+                    
+                    ragList.appendChild(badge);
+                });
+            } else {
+                ragRecommendations.style.display = 'none';
+            }
+        }
+
+        // Build compiled rules files
+        let compiledPromptText = '';
+
+        function updatePromptBuilder() {
+            if (selectedSkills.size === 0) {
+                compiledPromptText = '';
+                promptPreview.innerHTML = '<div style="color: var(--text-secondary); font-size: 0.85rem; padding: 1.5rem; text-align: center; font-style: italic;">Выберите один или несколько скиллов из списка слева, чтобы сформировать промпт или файл правил...</div>';
+                return;
+            }
+
+            // Get selected list
+            const selectedList = SKILLS_DB.filter(s => selectedSkills.has(s.id));
+            const format = exporterType.value;
+            let output = '';
+
+            // Concatenate rule files block
+            const blocks = selectedList.map(s => `# СКИЛЛ: /${s.id}\n\n${s.content.trim()}`);
+            output = blocks.join('\n\n---\n\n');
+            compiledPromptText = output;
+
+            // Clear visual preview container
+            promptPreview.innerHTML = '';
+
+            // Build accordions list
+            selectedList.forEach(s => {
+                const acc = document.createElement('div');
+                acc.className = 'preview-accordion';
+                
+                const header = document.createElement('div');
+                header.className = 'accordion-header';
+                header.innerHTML = `
+                    <span>/${s.id} (${s.name})</span>
+                    <div style="display: flex; align-items: center; gap: 0.6rem;">
+                        <i class="fa-solid fa-copy copy-single-btn" data-id="${s.id}" title="Скопировать этот промпт" style="cursor: pointer; opacity: 0.6; padding: 2px; transition: color 0.2s;"></i>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                `;
+                
+                const body = document.createElement('div');
+                body.className = 'accordion-body';
+                
+                // Parse markdown content
+                if (typeof marked !== 'undefined') {
+                    body.innerHTML = marked.parse(s.content);
+                } else {
+                    body.innerText = s.content;
+                }
+                
+                header.addEventListener('click', (e) => {
+                    if (e.target.closest('.copy-single-btn')) return;
+                    
+                    const isActive = acc.classList.contains('active');
+                    if (isActive) {
+                        acc.classList.remove('active');
+                        body.style.display = 'none';
+                    } else {
+                        acc.classList.add('active');
+                        body.style.display = 'block';
+                    }
+                });
+
+                header.querySelector('.copy-single-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    navigator.clipboard.writeText(s.content).then(() => {
+                        const icon = header.querySelector('.copy-single-btn');
+                        icon.className = 'fa-solid fa-circle-check';
+                        icon.style.color = '#10b981';
+                        setTimeout(() => {
+                            icon.className = 'fa-solid fa-copy copy-single-btn';
+                            icon.style.color = '';
+                        }, 2000);
+                    });
+                });
+                
+                acc.appendChild(header);
+                acc.appendChild(body);
+                promptPreview.appendChild(acc);
+            });
+        }
+
+        // Event listeners
+        function setupEventListeners() {
+            // Preset filters
+            presetButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    if (e.target.closest('.add-preset-btn')) return;
+                    
+                    document.getElementById('combo-description').style.display = 'none';
+                    
+                    presetButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentPreset = btn.dataset.preset;
+                    renderSkills();
+                });
+            });
+
+            // Quick load combos logic
+            document.querySelectorAll('.combo-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const comboId = btn.dataset.combo;
+                    const targetPresets = new Set(COMBOS[comboId]);
+                    
+                    // Clear current selection
+                    selectedSkills.clear();
+                    
+                    // Select all skills matching these presets
+                    SKILLS_DB.forEach(s => {
+                        if (targetPresets.has(s.preset)) {
+                            selectedSkills.add(s.id);
+                        }
+                    });
+                    
+                    // Show description
+                    const descInfo = COMBO_DESCRIPTIONS[comboId];
+                    if (descInfo) {
+                        document.getElementById('combo-desc-title').innerHTML = descInfo.title;
+                        document.getElementById('combo-desc-text').innerHTML = descInfo.desc;
+                        document.getElementById('combo-description').style.display = 'flex';
+                    }
+                    
+                    updatePromptBuilder();
+                    updatePresetCounts();
+                    renderSkills();
+                    runLocalRAG(aiSearchInput.value);
+                    
+                    // Visual feedback: briefly highlight the button
+                    const originalBg = btn.style.background;
+                    btn.style.background = 'rgba(16, 185, 129, 0.15)';
+                    btn.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+                    setTimeout(() => {
+                        btn.style.background = originalBg;
+                        btn.style.borderColor = '';
+                    }, 1000);
+                });
+            });
+
+            // Instant Search & RAG
+            aiSearchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value.toLowerCase().trim();
+                renderSkills();
+                runLocalRAG(e.target.value);
+            });
+
+            // Bulk actions
+            btnSelectPreset.addEventListener('click', () => {
+                document.getElementById('combo-description').style.display = 'none';
+                
+                SKILLS_DB.forEach(s => {
+                    if (currentPreset === 'all' || s.preset === currentPreset) {
+                        selectedSkills.add(s.id);
+                    }
+                });
+                updatePromptBuilder();
+                updatePresetCounts();
+                renderSkills();
+                runLocalRAG(aiSearchInput.value);
+            });
+
+            btnClearSelection.addEventListener('click', () => {
+                document.getElementById('combo-description').style.display = 'none';
+                
+                selectedSkills.clear();
+                updatePromptBuilder();
+                updatePresetCounts();
+                renderSkills();
+                runLocalRAG(aiSearchInput.value);
+            });
+
+            // Exporter change
+            exporterType.addEventListener('change', () => {
+                updatePromptBuilder();
+            });
+
+            // Copy prompt button
+            btnCopyPrompt.addEventListener('click', () => {
+                const text = compiledPromptText;
+                if (!text) {
+                    alert('Пожалуйста, выберите сначала хотя бы один скилл.');
+                    return;
+                }
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalHTML = btnCopyPrompt.innerHTML;
+                    btnCopyPrompt.innerHTML = '<i class="fa-solid fa-circle-check"></i> Скопировано!';
+                    btnCopyPrompt.style.background = '#10b981';
+                    setTimeout(() => {
+                        btnCopyPrompt.innerHTML = originalHTML;
+                        btnCopyPrompt.style.background = '';
+                    }, 2000);
+                });
+            });
+
+            // Download file rules button
+            btnDownloadPrompt.addEventListener('click', () => {
+                const text = compiledPromptText;
+                if (!text) {
+                    alert('Пожалуйста, выберите сначала хотя бы один скилл.');
+                    return;
+                }
+                
+                const format = exporterType.value;
+                let filename = 'SYSTEM_PROMPT.md';
+                
+                if (format === 'cursor') filename = '.cursorrules';
+                else if (format === 'vscode') filename = '.clinerules';
+                else if (format === 'copilot') filename = 'copilot-instructions.md';
+                else if (format === 'windsurf') filename = '.windsurfrules';
+                else if (format === 'aider') filename = 'CONVENTIONS.md';
+                else if (format === 'pi') filename = 'APPEND_SYSTEM.md';
+                else if (format === 'claudeprompt') filename = '.claudeprompt';
+                else if (format === 'agents') filename = 'AGENTS.md';
+                else if (format === 'prompt') {
+                    // Try to guess a good name based on selected preset or count
+                    if (selectedSkills.size === 1) {
+                        filename = `${Array.from(selectedSkills)[0]}_PROMPT.md`;
+                    } else {
+                        filename = 'custom_PROMPT.md';
+                    }
+                }
+
+                const blob = new Blob([text], { type: 'text/markdown;charset=utf-8;' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.setAttribute('download', filename);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+
+            // Modal detailing view
+            skillsGrid.addEventListener('click', (e) => {
+                const detailsBtn = e.target.closest('[data-action="view-details"]');
+                if (!detailsBtn) return;
+                
+                const skillId = detailsBtn.dataset.id;
+                openSkillDetails(skillId);
+            });
+
+            modalClose.addEventListener('click', () => {
+                detailModal.style.display = 'none';
+            });
+
+            // Modal copy button
+            const btnCopyModal = document.getElementById('btn-copy-modal');
+            btnCopyModal.addEventListener('click', () => {
+                if (!activeModalSkillId) return;
+                const skill = SKILLS_DB.find(s => s.id === activeModalSkillId);
+                if (skill) {
+                    navigator.clipboard.writeText(skill.content).then(() => {
+                        const originalHTML = btnCopyModal.innerHTML;
+                        btnCopyModal.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+                        btnCopyModal.style.background = 'rgba(16, 185, 129, 0.2)';
+                        btnCopyModal.style.color = '#10b981';
+                        setTimeout(() => {
+                            btnCopyModal.innerHTML = originalHTML;
+                            btnCopyModal.style.background = '';
+                            btnCopyModal.style.color = '';
+                        }, 2000);
+                    });
+                }
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target === detailModal) {
+                    detailModal.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
